@@ -30,6 +30,6 @@ public class Employer extends AbstractEntity {
     public Employer() {}
     @OneToMany
     @JoinColumn(name = "employer_id")
-    private List<Job> jobs = new ArrayList();
+    private List<Job> jobs = new ArrayList<>();
 
 }

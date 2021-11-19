@@ -1,5 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 
+import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by LaunchCode
@@ -38,6 +40,7 @@ private JobRepository jobRepository;
         model.addAttribute("title", "Add Job");
         model.addAttribute(new Job());
         model.addAttribute("employers",employerRepository.findAll());
+        model.addAttribute("skills",skillRepository.findAll());
         return "add";
     }
 
@@ -51,12 +54,21 @@ private JobRepository jobRepository;
         }
         List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
         newJob.setSkills(skillObjs);
+        Employer employer = employerRepository.findById(employerId).get();
+        newJob.setEmployer(employer);
+        jobRepository.save(newJob);
         return "redirect:";
     }
 
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
-        model.addAttribute("",employerRepository.findById(jobId));
+        Optional<Job> optionalJob = this.jobRepository.findById(jobId);
+        if (optionalJob.isPresent()) {
+            Job job = (Job)optionalJob.get();
+            model.addAttribute("job", job);
+            return "view";
+        } else
+//        model.addAttribute("job",employerRepository.findById(jobId));
         return "view";
     }
 

@@ -36,5 +36,5 @@ public class Skill extends AbstractEntity {
     }
 
     @ManyToMany(mappedBy = "skills")
-    private List<Job> jobs = new ArrayList();
+    private List<Job> jobs = new ArrayList<>();
 }
